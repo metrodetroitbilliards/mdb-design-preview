@@ -1,0 +1,93 @@
+/* Championship refinement: shared rhythm, readable controls and purposeful surfaces. */
+:root{--line:#34383e;--muted:#b5bac2}
+body{font-size:16px;line-height:1.7}
+.wrap{max-width:1180px}
+.review-bar{letter-spacing:.12em;padding:7px 16px}
+.header{padding-block:24px;gap:28px;background:#101214}
+nav{gap:22px}nav a{font-size:13px;font-weight:600}
+.header-join{font-weight:700}
+.section{padding-block:80px}
+.page-intro{padding-block:72px 46px;position:relative}
+.page-intro:before{content:"";display:block;width:48px;height:4px;background:var(--red);margin-bottom:28px}
+.page-intro h1{font-size:clamp(54px,6.4vw,90px);max-width:980px}
+.page-intro .lede{max-width:680px;color:#c5c9cf;font-size:18px;line-height:1.65}
+.eyebrow{color:#bfc4ca;letter-spacing:.15em}
+.section-head{gap:32px;align-items:end}
+.section-head p{max-width:420px;color:var(--muted)}
+.button{border-radius:5px;min-height:48px;font-size:13px;padding:15px 22px;letter-spacing:.015em}
+.button.outline{border-color:#686f78;background:#15181c}
+.text-link{font-weight:600;line-height:1.5;padding-bottom:7px}
+.resource,.event,.report-panel,.notice,.contact-grid form{border:1px solid var(--line);border-radius:12px;background:#171a1e}
+.resource{padding:30px;min-width:0}
+.resource h3{font-size:24px;line-height:1.25;margin-bottom:16px}
+.resource p{color:#c0c5cd}
+.resource .eyebrow{font-size:10px;color:#ff6875}
+.resource .text-link{display:inline-block;margin-top:8px}
+.two-col,.resource-grid,.event-grid{gap:20px}
+.notice{border-left:3px solid var(--red);padding:24px 28px;margin-bottom:28px}
+.notice p{margin:8px 0 0;color:var(--muted)}
+.report-panel{padding:36px;margin-top:24px;background:linear-gradient(125deg,#22262c,#14171a)}
+.report-panel h2{font-size:clamp(34px,4vw,52px);max-width:800px;line-height:1.05}
+.report-panel .small{max-width:680px;margin-top:20px}
+label{font-size:13px;font-weight:600;letter-spacing:.01em}
+input,select,textarea{border-radius:6px;min-height:48px;font-size:16px!important;max-width:100%;color:var(--ink);background:#101316;border:1px solid #59616a;padding:12px}
+input[type=checkbox]{min-height:auto;width:18px;height:18px;accent-color:var(--red);vertical-align:middle}
+.filters{border:1px solid var(--line);border-radius:12px;padding:22px;background:#171a1e;gap:16px}
+.filters select{width:100%}.filters label{min-width:0}
+.quiet-button{min-height:46px;border-radius:6px}
+.night{padding:26px 4px;border-bottom:1px solid var(--line)}
+.night h3{font-size:23px;margin-bottom:8px}.night .day{color:#d9dde2}
+.night-sessions .eyebrow{font-size:9px;margin-bottom:8px}
+.night-sessions p{color:#c2c7ce;line-height:1.7}
+.circle-link{border:1px solid #626a74;min-width:40px;min-height:40px}
+.event{padding:30px;border-top:3px solid var(--red)}
+.event h3{font-size:27px}.event-date{line-height:1.1}
+.event p:not(.event-date):not(.eyebrow){color:#c0c5cd}
+.badge{border-radius:4px;font-size:11px;letter-spacing:.03em;padding:6px 10px}
+.split{align-items:center;gap:56px}.split figure{margin:0;min-width:0}
+.split img{border-radius:12px;aspect-ratio:4/3;object-fit:cover}
+.split figcaption{font-size:11px;color:var(--muted);padding-top:12px}
+.split p{max-width:560px}
+.faq{border:1px solid var(--line);border-radius:8px;background:#16191c;padding:0;margin-bottom:12px;overflow:hidden}
+.faq summary{padding:21px 24px;font:600 16px/1.5 Inter,Arial,sans-serif;cursor:pointer}
+.faq[open]{border-color:#737b85}.faq[open] summary{border-bottom:1px solid var(--line);background:#202429}
+.faq>p,.faq>.text-link{margin:18px 24px;overflow-wrap:anywhere;font-size:14px;line-height:1.85}
+.faq a{color:#ff8892;text-decoration:underline;text-underline-offset:4px}
+#local-bylaws>p{max-width:790px}
+.shop-banner{border-radius:12px;border:1px solid var(--line);overflow:hidden}
+.shop-banner .merch-word{font-size:clamp(100px,13vw,185px)}
+.shop-jump{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.product-grid{padding-block:28px}
+.awards-section{border-top:1px solid var(--line);margin-top:48px}
+.awards-section>.lede{max-width:680px}
+.contact-grid{gap:50px;align-items:start;padding-bottom:70px}
+.contact-grid form{padding:30px;box-shadow:0 18px 48px #0003}
+.contact-grid label{display:block;margin-bottom:18px}
+.contact-grid input,.contact-grid select,.contact-grid textarea{display:block;width:100%;margin-top:8px}
+.contact-grid form .button{width:100%}.email-link{overflow-wrap:anywhere}
+.cta{border-top:1px solid var(--line);gap:28px}.cta h2{max-width:700px}
+footer{margin-top:60px;background:#101214;border-top:1px solid var(--line)}
+.footer-grid{gap:30px}.footer-grid p{max-width:440px}
+.footer-bottom{padding-top:24px;font-size:11px;color:#b8bec6}
+@media(max-width:900px){.header{gap:18px}nav{gap:14px}nav a{font-size:12px}.section-head{align-items:start}}
+@media(max-width:760px){
+ .wrap{width:calc(100% - 40px)}.header{padding:19px 20px}
+ nav.open{padding-top:12px}nav a{font-size:15px;padding:15px 8px}
+ .page-intro{padding-block:42px 30px}.page-intro:before{margin-bottom:23px;width:36px}
+ .page-intro h1{font-size:clamp(46px,12vw,64px);line-height:1}.page-intro .lede{font-size:15px}
+ .section{padding-block:52px}.section-head{margin-bottom:24px}
+ h2{font-size:clamp(34px,9vw,44px)}.section-head label{width:100%}
+ .resource,.event,.report-panel{padding:24px}.resource h3{font-size:22px}
+ .two-col,.resource-grid,.event-grid{gap:16px}
+ .notice{padding:20px}.notice strong{font-size:16px}
+ .filters{padding:16px;gap:14px}.filters label{font-size:12px}
+ .night{padding:23px 0}.night h3{font-size:21px}.night .day{font-size:30px}
+ .night-sessions p{font-size:12px}.night .small{font-size:11px}
+ .faq summary{padding:19px 18px;font-size:15px}.faq>p,.faq>.text-link{margin:16px 18px}
+ .split{gap:28px}.contact-grid{gap:30px}.contact-grid form{padding:22px}
+ .shop-banner{padding:24px}.shop-banner h2{font-size:40px}.merch-word{margin-block:10px!important}
+ .awards-section{margin-top:36px}.awards-section .actions{display:grid;grid-template-columns:1fr}
+ .awards-section .button{width:100%}.cta h2{font-size:38px}
+ footer{margin-top:38px}.footer-grid{gap:22px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
