@@ -46,3 +46,18 @@ window.onload=function(){
  const matchButton=document.getElementById('submitBtn');matchButton.onclick=()=>showToast('Match submission is disabled in this isolated test.','warning');
  updateFormatUI();google.script.run.withSuccessHandler(data=>{window.regInfo=data.regInfo;window.teamRosters=data.rosters;window.qualifiedRegPlayers=data.qualifiedRegPlayers;updateRegTeamDropdown();validateScoringInputs();}).getAppData();switchView(new URLSearchParams(location.search).get('view')==='scoring'?'scoring':'registration');
 };
+
+// Keep tracker artwork in sync without changing the scoring functions.
+const labOriginalUpdateFormatUI = window.updateFormatUI;
+window.updateFormatUI = function (...args) {
+  const result = labOriginalUpdateFormatUI.apply(this, args);
+  const number = document.getElementById('game_format').value.split('-')[0];
+  document.querySelectorAll('.tracker-controls').forEach(group => {
+    group.querySelectorAll('.track-btn').forEach((button, index) => {
+      button.innerHTML = `G${index + 1} <span class="format-ball format-ball-${number}" aria-hidden="true"><span>${number}</span></span>`;
+      button.setAttribute('aria-label', `Game ${index + 1}: track ${number}-Ball ball by ball`);
+      button.title = `Track ${number}-Ball ball by ball`;
+    });
+  });
+  return result;
+};
