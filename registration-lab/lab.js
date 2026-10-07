@@ -54,7 +54,7 @@ window.updateFormatUI = function (...args) {
   const number = document.getElementById('game_format').value.split('-')[0];
   document.querySelectorAll('.tracker-controls').forEach(group => {
     group.querySelectorAll('.track-btn').forEach((button, index) => {
-      button.innerHTML = `G${index + 1} <span class="format-ball format-ball-${number}" aria-hidden="true"><span>${number}</span></span>`;
+      button.innerHTML = `G${index + 1} ` + (number === "9" || number === "10" ? `<img class="format-ball format-ball-${number} generated-ball" src="assets/ball-${number}-generated.png" alt="" width="34" height="34">` : `<span class="format-ball format-ball-${number}" aria-hidden="true"><span>${number}</span></span>`);
       button.setAttribute('aria-label', `Game ${index + 1}: track ${number}-Ball ball by ball`);
       button.title = `Track ${number}-Ball ball by ball`;
     });
