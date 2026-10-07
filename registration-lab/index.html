@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html>
+<head><title>Vegas Registration Lab - Sample Data Only</title><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'"><link rel="stylesheet" href="lab.css"><script src="fixtures.js"></script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f8; padding: 10px; font-size: 15px; margin: 0; color: #333;}
+    .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    h2 { text-align: center; margin-top: 0; margin-bottom: 10px; color: #222; font-size: 1.5em;}
+
+    .nav-tabs { display: flex; justify-content: center; background: #222; margin: 0 auto 20px auto; max-width: 1000px; border-radius: 8px; overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .nav-btn { flex: 1; padding: 16px; background: #222; color: #aaa; border: none; font-size: 1.1em; font-weight: bold; cursor: pointer;
+               transition: all 0.2s ease; text-align: center; }
+    .nav-btn:hover { background: #333; color: #fff; }
+    .nav-btn.active { background: #1a73e8; color: white; border-bottom: 4px solid #0d47a1; }
+    .view-section { display: block; }
+    .hidden { display: none !important; }
+
+    .settings-bar { display: flex; justify-content: center; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px dashed #ddd; gap: 10px;}
+    .settings-bar label { font-weight: 900; font-size: 1.1em; color: #555; text-transform: uppercase;}
+    .settings-bar select { padding: 8px 15px; font-size: 1.1em; font-weight: bold; border-radius: 6px; border: 2px solid #bbb; background-color: #fff; cursor: pointer;
+                           outline: none; transition: border-color 0.2s;}
+    .settings-bar select:focus { border-color: #1a73e8; }
+
+    .header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .team-box { padding: 15px; border-radius: 8px; border: 2px solid #ccc; display: flex; flex-direction: column; gap: 8px; }
+    .home-box { border-color: #1a73e8; background: #eef6ff; }
+    .away-box { border-color: #d93025; background: #fff5f4; }
+    .team-box input[type="text"] { width: 100%; font-size: 1.2em; font-weight: bold; padding: 8px; border: 1px solid #bbb; border-radius: 4px; transition: border-color 0.3s;
+                                  }
+
+    .matchups-container { display: flex; flex-direction: column; gap: 15px; }
+    .matchup-card { display: grid; grid-template-columns: 1fr 50px 1fr; background: white; border-radius: 8px; border: 1px solid #ddd;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; }
+    .player-section { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+    .home-section { background: #fafcff; }
+    .away-section { background: #fffcfc; }
+    .seat-label { font-weight: bold; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
+    .home-label { color: #1a73e8; }
+    .away-label { color: #d93025; }
+
+    .vs-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; background: #f9f9f9; border-left: 1px solid #eee;
+                  border-right: 1px solid #eee; padding: 10px 0; gap: 6px;}
+    .tracker-controls { display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 0 4px;}
+    .track-btn { background: #333; color: white; border: none; border-radius: 6px; padding: 6px 2px; cursor: pointer; font-size: 0.75em; font-weight: bold;
+                 transition: background 0.2s; display: flex; justify-content: center; align-items: center; gap: 3px; width: 100%;}
+    .track-btn:hover { background: #555; }
+
+    .match-running-total { grid-column: 1 / -1; background: #eef2f6; padding: 12px 15px; font-weight: bold; font-size: 1.1em; border-top: 1px dashed #ccc;
+                           color: #555; display: flex; justify-content: space-around; align-items: center; }
+    .run-team-val { font-size: 1.3em; font-weight: 900; margin-left: 8px; }
+
+    .invalid-field { border: 2px solid #d93025 !important; background-color: #fce8e6 !important; }
+    .invalid-field-container { border: 2px solid #d93025 !important; background-color: #fce8e6 !important; border-radius: 6px; padding: 4px; transition: all 0.3s;}
+
+    .search-container { position: relative; width: 100%; transition: all 0.3s; }
+    .search-container input[type="text"] { width: 100%; padding: 10px; border: 1px solid #bbb; border-radius: 4px; font-size: 1.1em; font-weight: bold;}
+    .suggestions { position: absolute; background: white; border: 1px solid #999; width: 100%; z-index: 10; text-align: left; max-height: 200px; overflow-y: auto;
+                   box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 0 0 4px 4px; }
+    .suggestion-item { padding: 12px 10px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 1.1em; font-weight: bold; }
+    .suggestion-item:hover { background: #f0f0f0; }
+    .player-name-disp { font-size: 1.15em; font-weight: bold; margin-top: 8px; min-height: 1.3em; }
+    .fargo-label { font-size: 0.85em; color: #666; background: #e0e0e0; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+
+    .scores-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 5px; }
+    .score-box { display: flex; flex-direction: column; align-items: center; font-size: 0.85em; font-weight: bold; color: #555; gap: 4px; }
+    .score-box input[type="number"] { width: 100%; padding: 12px 5px; text-align: center; font-weight: bold; font-size: 1.1em; border: 1px solid #999; border-radius: 4px;
+                                      transition: all 0.2s; }
+    .player-tot { font-size: 1.4em; font-weight: 900; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; border-radius: 4px; padding: 5px;
+                 }
+    .home-tot { color: #1a73e8; background: #e8f0fe; border: 1px solid #1a73e8; }
+    .away-tot { color: #d93025; background: #fce8e6; border: 1px solid #d93025; }
+
+    .valid-score { border: 2px solid #34a853 !important; background-color: #e6f4ea !important; color: #1e8e3e; }
+    .invalid-score { border: 2px solid #ea4335 !important; background-color: #fce8e6 !important; color: #d93025; }
+
+    .totals-breakdown-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+    .team-breakdown { padding: 15px; border-radius: 8px; border: 2px solid #ccc; display: flex; flex-direction: column; align-items: center; }
+    .home-breakdown { border-color: #1a73e8; background: #eef6ff; }
+    .away-breakdown { border-color: #d93025; background: #fff5f4; }
+    .breakdown-title { font-size: 1.2em; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; color: #333;}
+    .fargo-stat-row { font-size: 1.1em; font-weight: bold; color: #555; margin-bottom: 12px; background: white; padding: 4px 12px; border-radius: 20px;
+                      border: 1px solid #ddd; }
+    .breakdown-math { display: flex; align-items: center; gap: 12px; font-size: 1.1em; font-weight: bold; text-align: center; color: #555;}
+
+    .hcap-display { width: 70px; padding: 8px; font-size: 1.2em; font-weight: bold; text-align: center; border: 2px solid #ccc; border-radius: 6px; background: #eef2f6;
+                    display: flex; align-items: center; justify-content: center; height: 42px; color: #333;}
+
+    .math-op { font-size: 1.5em; color: #777; font-weight: 900; }
+    .penalty-text { color: #d93025; }
+    .final-score { font-size: 2.2em; font-weight: 900; background: #333; color: white; padding: 10px 20px; border-radius: 8px; margin-left: 10px; min-width: 80px; }
+
+    .submit-btn { width: 100%; padding: 18px; background: #2e7d32; color: white; border: none; font-size: 1.3em; font-weight: bold; border-radius: 8px; cursor: pointer;
+                  margin-top: 15px; box-shadow: 0 4px 6px rgba(46, 125, 50, 0.3); transition: background 0.3s; }
+    .submit-btn:disabled { background: #9e9e9e; cursor: not-allowed; box-shadow: none; }
+
+    #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; width: 90%;
+                       max-width: 400px; pointer-events: none; }
+    .toast { background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; font-size: 1.1em; font-weight: 500;
+             box-shadow: 0 6px 16px rgba(0,0,0,0.2); opacity: 0; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: auto; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background-color: #d93025; }
+    .toast.success { background-color: #1e8e3e; }
+    .toast.warning { background-color: #f9ab00; color: #222; }
+
+    /* Interactive Ball Tracker UI */
+    #trackerOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9000; display: flex; justify-content: center;
+                      align-items: center; backdrop-filter: blur(3px); }
+    .tracker-modal { background: white; width: 95%; max-width: 450px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); overflow: hidden; display: flex;
+                     flex-direction: column; }
+    .tracker-header { background: #333; color: white; padding: 15px; text-align: center; font-size: 1.3em; font-weight: bold; }
+    .tracker-body { padding: 20px; }
+
+    .tracker-teams { display: flex; justify-content: space-between; font-size: 1.1em; font-weight: bold; margin-bottom: 20px; text-align: center; }
+    .tracker-team { flex: 1; padding: 10px; border-radius: 6px; border: 2px solid transparent; }
+    .tracker-h-team { color: #1a73e8; background: #eef6ff; border-color: #1a73e8; margin-right: 10px;}
+    .tracker-a-team { color: #d93025; background: #fff5f4; border-color: #d93025; margin-left: 10px;}
+
+    .balls-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; justify-items: center; margin-bottom: 25px; }
+    .pool-ball { position: relative; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.4em; font-weight: 900;
+                 cursor: pointer; user-select: none; border: 2px solid #ccc; background: white; color: #444; transition: transform 0.1s, background 0.2s;
+                 box-shadow: inset -3px -3px 6px rgba(0,0,0,0.1); }
+    .pool-ball:active { transform: scale(0.9); }
+
+    .pool-ball.state-h { background: #1a73e8; color: white; border-color: #0d47a1; }
+    .pool-ball.state-a { background: #d93025; color: white; border-color: #b71c1c; }
+    .pool-ball.money-ball { outline: 4px solid #f9ab00; outline-offset: 2px; }
+
+    .pool-ball.state-dead { background: #f4f6f8; color: #bbb; border-color: #ddd; }
+    .pool-ball.state-dead::after {
+      content: ''; position: absolute; width: 80%; height: 80%; border: 3px solid #d93025; border-radius: 50%;
+      background: linear-gradient(to bottom right, transparent calc(50% - 1.5px), #d93025 calc(50% - 1.5px), #d93025 calc(50% + 1.5px), transparent calc(50% + 1.5px));
+      opacity: 0.75; pointer-events: none;
+    }
+
+    .tracker-footer { display: flex; gap: 10px; padding: 0 20px 20px 20px; }
+    .btn-apply { flex: 2; padding: 15px; background: #2e7d32; color: white; border: none; border-radius: 6px; font-size: 1.2em; font-weight: bold; cursor: pointer;
+                 }
+    .btn-cancel { flex: 1; padding: 15px; background: #999; color: white; border: none; border-radius: 6px; font-size: 1.1em; font-weight: bold; cursor: pointer;
+                  }
+
+    @media (min-width: 769px) {
+      .totals-breakdown-container { flex-direction: row; justify-content: space-between; }
+      .team-breakdown { flex: 1; }
+    }
+    @media (max-width: 768px) {
+      .header-grid { grid-template-columns: 1fr; }
+      .matchup-card { grid-template-columns: 1fr; border: 2px solid #444; }
+      .vs-divider { flex-direction: row; padding: 15px; border-left: none; border-right: none; border-top: 2px dashed #ccc; border-bottom: 2px dashed #ccc; background: #f0f0f0;
+                    gap: 15px; justify-content: space-around;}
+      .tracker-controls { flex-direction: row; justify-content: center; gap: 15px; }
+      .track-btn { width: auto; padding: 10px 15px; font-size: 1em; }
+      .home-section { border-bottom: none; }
+      .match-running-total { flex-direction: column; gap: 8px; padding: 15px; }
+      .breakdown-math { gap: 6px; font-size: 0.85em; }
+      .math-op { font-size: 1.2em; }
+      .final-score { font-size: 1.6em; padding: 8px 12px; }
+      .hcap-display { width: 55px; height: 35px; font-size: 1.1em; }
+    }
+  </style>
+</head>
+<body><aside class="lab-banner"><h1>Registration test lab</h1><strong>Sample data only. No real registrations or scores can be changed.</strong><p>Try Demo Five, Six or Eight for automatic fill; Demo Ten for manual choice; Demo Four or Empty for insufficient players. Test saves last only until you refresh.</p><p><a href="?view=registration">Registration-first link</a> &middot; <a href="?view=scoring">Direct match-scoring link</a></p><label><input id="lab-fail-save" type="checkbox"> Simulate a failed registration save</label></aside>
+
+  <div class="nav-tabs">
+    <button id="tab-scoring" class="nav-btn" onclick="switchView('scoring')">Log Match</button>
+    <button id="tab-registration" class="nav-btn active" onclick="switchView('registration')">Team Registration</button>
+  </div>
+
+  <div id="scoring-view" class="view-section hidden">
+    <div class="container">
+      <h2>USAPL Match Log</h2>
+
+      <div class="settings-bar">
+        <label for="game_format">Format:</label>
+        <select id="game_format" onchange="updateFormatUI()">
+          <option value="8-Ball">8-Ball</option>
+          <option value="9-Ball" selected>9-Ball</option>
+          <option value="10-Ball">10-Ball</option>
+        </select>
+      </div>
+
+      <div class="header-grid">
+        <div class="team-box home-box">
+          <div class="search-container">
+            <input type="text" id="h_team_name" placeholder="Select Home Team..." oninput="searchTeamUI(this, 'h')" onfocus="searchTeamUI(this, 'h')" onblur="setTimeout(validateScoringInputs, 200)">
+            <div class="suggestions hidden"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-top: 10px;">
+            <span id="h_fargo_total" style="font-weight: bold; font-size: 1.1em;">Fargo Sum: 0</span>
+            <span id="h_penalty" style="color:#d93025; font-weight: bold; font-size: 1em;"></span>
+          </div>
+        </div>
+
+        <div class="team-box away-box">
+          <div class="search-container">
+            <input type="text" id="a_team_name" placeholder="Select Away Team..." oninput="searchTeamUI(this, 'a')" onfocus="searchTeamUI(this, 'a')" onblur="setTimeout(validateScoringInputs, 200)">
+            <div class="suggestions hidden"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-top: 10px;">
+            <span id="a_fargo_total" style="font-weight: bold; font-size: 1.1em;">Fargo Sum: 0</span>
+            <span id="a_penalty" style="color:#d93025; font-weight: bold; font-size: 1em;"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="matchups-container">
+        <script>
+          for(let i=0; i<5; i++) {
+            document.write(`
+              <div class="matchup-card">
+                
+                <div class="player-section home-section">
+                  <div class="seat-label home-label" id="label_h_match_${i}">Match ${i+1} - Home</div>
+                  <div class="search-container" id="h_player_box_${i}" style="padding: 4px;">
+                    <input type="text" id="h_p_input_${i}" placeholder="Select Player..." oninput="searchScoringPlayer(this, 'h', ${i})" onfocus="searchScoringPlayer(this, 'h', ${i})" onblur="handlePlayerBlur(this, 'h', ${i})" style="width:100%; padding:10px; border:1px solid #bbb; border-radius:4px; font-size:1em;">
+                    <div class="suggestions hidden"></div>
+                    <div class="player-name-disp" id="h_name_disp_${i}">---</div>
+                    <div><span class="fargo-label" id="h_fargo_disp_${i}">Fargo: 0</span></div>
+                  </div>
+                  
+                  <div class="scores-grid">
+                    <div class="score-box">G1 <input type="number" data-row="${i}" data-game="1" oninput="validateMaxScore(this)" id="h_s_${i}_1"></div>
+                    <div class="score-box">G2 <input type="number" data-row="${i}" data-game="2" oninput="validateMaxScore(this)" id="h_s_${i}_2"></div>
+                    <div class="score-box">G3 <input type="number" data-row="${i}" data-game="3" oninput="validateMaxScore(this)" id="h_s_${i}_3"></div>
+                    <div class="score-box">TOT <div class="player-tot home-tot" id="h_tot_${i}">0</div></div>
+                  </div>
+                </div>
+
+                <div class="vs-divider">
+                  <div style="color: #aaa; margin-bottom: 5px; display: none;" class="desktop-vs-label">VS</div>
+                  <div class="tracker-controls">
+                    <button class="track-btn" onclick="openTracker(${i}, 1)" title="Score Ball-by-Ball">G1 🎱</button>
+                    <button class="track-btn" onclick="openTracker(${i}, 2)" title="Score Ball-by-Ball">G2 🎱</button>
+                    <button class="track-btn" onclick="openTracker(${i}, 3)" title="Score Ball-by-Ball">G3 🎱</button>
+                  </div>
+                </div>
+
+                <div class="player-section away-section">
+                  <div class="seat-label away-label" id="label_a_match_${i}">Match ${i+1} - Away</div>
+                  <div class="search-container" id="a_player_box_${i}" style="padding: 4px;">
+                    <input type="text" id="a_p_input_${i}" placeholder="Select Player..." oninput="searchScoringPlayer(this, 'a', ${i})" onfocus="searchScoringPlayer(this, 'a', ${i})" onblur="handlePlayerBlur(this, 'a', ${i})" style="width:100%; padding:10px; border:1px solid #bbb; border-radius:4px; font-size:1em;">
+                    <div class="suggestions hidden"></div>
+                    <div class="player-name-disp" id="a_name_disp_${i}">---</div>
+                    <div><span class="fargo-label" id="a_fargo_disp_${i}">Fargo: 0</span></div>
+                  </div>
+                  
+                  <div class="scores-grid">
+                    <div class="score-box">G1 <input type="number" data-row="${i}" data-game="1" oninput="validateMaxScore(this)" id="a_s_${i}_1"></div>
+                    <div class="score-box">G2 <input type="number" data-row="${i}" data-game="2" oninput="validateMaxScore(this)" id="a_s_${i}_2"></div>
+                    <div class="score-box">G3 <input type="number" data-row="${i}" data-game="3" oninput="validateMaxScore(this)" id="a_s_${i}_3"></div>
+                    <div class="score-box">TOT <div class="player-tot away-tot" id="a_tot_${i}">0</div></div>
+                  </div>
+                </div>
+
+                <div class="match-running-total">
+                  <div><span id="label_h_run_${i}">HOME TEAM SCORE:</span> <span id="h_run_team_${i}" class="run-team-val" style="color: #1a73e8;">0</span></div>
+                  <div><span id="label_a_run_${i}">AWAY TEAM SCORE:</span> <span id="a_run_team_${i}" class="run-team-val" style="color: #d93025;">0</span></div>
+                </div>
+
+              </div>
+            `);
+          }
+        </script>
+      </div>
+
+      <div class="totals-breakdown-container">
+        <div class="team-breakdown home-breakdown">
+          <div class="breakdown-title" id="label_h_breakdown">Home Final Breakdown</div>
+          <div class="fargo-stat-row">Total Fargo: <span id="h_final_fargo_disp" style="color: #1a73e8;">0</span></div>
+          
+          <div class="breakdown-math">
+            <div>Points<br><span id="h_final_pts" style="font-size:1.3em;">0</span></div>
+            <div class="math-op">+</div>
+            <div>HCP<br><div id="h_hcap" class="hcap-display">0</div></div>
+            <div class="math-op">-</div>
+            <div class="penalty-text">Penalty<br><span id="h_final_pen" style="font-size:1.3em;">0</span></div>
+            <div class="math-op">=</div>
+            <div class="final-score" id="h_run_total">0</div>
+          </div>
+        </div>
+
+        <div class="team-breakdown away-breakdown">
+          <div class="breakdown-title" id="label_a_breakdown">Away Final Breakdown</div>
+          <div class="fargo-stat-row">Total Fargo: <span id="a_final_fargo_disp" style="color: #d93025;">0</span></div>
+          
+          <div class="breakdown-math">
+            <div>Points<br><span id="a_final_pts" style="font-size:1.3em;">0</span></div>
+            <div class="math-op">+</div>
+            <div>HCP<br><div id="a_hcap" class="hcap-display">0</div></div>
+            <div class="math-op">-</div>
+            <div class="penalty-text">Penalty<br><span id="a_final_pen" style="font-size:1.3em;">0</span></div>
+            <div class="math-op">=</div>
+            <div class="final-score" id="a_run_total">0</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="submitBtn" class="submit-btn" onclick="processSubmit()">SUBMIT FINAL MATCH LOG</button>
+    </div>
+  </div>
+
+  <div id="registration-view" class="view-section">
+    <div class="container">
+      <h2>Team Roster Registration</h2>
+      
+      <p style="text-align:center; color:#666; margin-top:-5px; margin-bottom:20px; line-height:1.5;">
+        If you have multiple bids you must register each team individually and for each format even if the rosters are the same.
+        This is to allow for improved automation. If you don't register each team, your team will not be able to play.
+        Min 5 players, Max 8 players. You are allowed to have different rosters for different bids if you like.
+      </p>
+
+      <div style="background:#f9f9f9; padding:20px; border-radius:8px; border:1px solid #ddd; margin-bottom:25px;">
+        <div style="display:flex; flex-direction:column; gap:15px;">
+          
+          <div>
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#444;">1. Select Format League:</label>
+            <select id="reg_format" onchange="updateRegTeamDropdown()" style="width:100%; padding:12px; font-size:1.1em; font-weight:bold; border-radius:6px; border:2px solid #bbb; background:#fff;">
+              <option value="8-Ball">8-Ball</option>
+              <option value="9-Ball" selected>9-Ball</option>
+              <option value="10-Ball">10-Ball</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-weight:bold; display:block; margin-bottom:5px; color:#444;">2. Select Qualified Team & Bid:</label>
+            <select id="reg_team_name" onchange="checkRegTeamStatus()" style="width:100%; padding:12px; font-size:1.1em; font-weight:bold; border-radius:6px; border:2px solid #bbb; background:#fff; cursor:pointer;">
+              <option value="">-- Choose Format First --</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="border-bottom:2px solid #333; padding-bottom:5px; margin-bottom:15px; color:#222; font-size:1.2em; text-transform:uppercase;">Roster Selection</h3>
+      <div style="display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:25px;">
+        <script>
+          for (let i = 0; i < 8; i++) {
+            let reqText = i < 5 ? '<span style="color:#d93025; font-size:0.9em;">* Base Player</span>' : '<span style="color:#777; font-size:0.9em;">(Optional Sub Player)</span>';
+            document.write([
+              '<div style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:6px; display:flex; flex-direction:column; gap:6px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">',
+                '<div style="font-weight:bold; color:#444; display:flex; justify-content:space-between; align-items:center;">Player ' + (i+1) + ' ' + reqText + '</div>',
+                '<div class="search-container">',
+                  '<input type="text" id="reg_p_input_' + i + '" placeholder="Select Qualified Player..." oninput="searchRegPlayer(this, ' + i + ')" onfocus="searchRegPlayer(this, ' + i + ')" onblur="handleRegPlayerBlur(this, ' + i + ')" style="width:100%; padding:10px; border:1px solid #bbb; border-radius:4px; font-size:1.1em; font-weight:bold;">',
+                  '<div class="suggestions hidden"></div>',
+                  '<div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center; background:#fcfcfc; padding:6px; border-radius:4px; border:1px solid #eee;">',
+                    '<div>',
+                      '<span id="reg_name_disp_' + i + '" style="font-weight:bold; font-size:1.1em; color:#222;">---</span> &nbsp;',
+                      '<span class="fargo-label" id="reg_fargo_disp_' + i + '">Fargo: 0</span>',
+                    '</div>',
+                    '<button type="button" onclick="clearRegSlot(' + i + ')" style="background:#f4f6f8; border:1px solid #ccc; border-radius:4px; padding:6px 10px; font-size:0.85em; cursor:pointer; font-weight:bold; color:#555;">Clear</button>',
+                  '</div>',
+                '</div>',
+              '</div>'
+            ].join(''));
+          }
+        </script>
+      </div>
+
+      <button id="regSubmitBtn" class="submit-btn" disabled style="background:#1a73e8; box-shadow:0 4px 6px rgba(26,115,232,0.3);" onclick="processRegSubmit()">SUBMIT ROSTER REGISTRATION</button>
+    </div>
+  </div>
+
+  <div id="trackerOverlay" class="hidden">
+    <div class="tracker-modal">
+      <div class="tracker-header">Score Tracker | Match <span id="bt_match"></span> - Game <span id="bt_game"></span></div>
+      <div class="tracker-body">
+        
+        <div class="tracker-teams">
+          <div class="tracker-team tracker-h-team">
+            <div style="font-size:0.8em; color:#555;">HOME</div>
+            <div id="bt_home_name" style="font-size:1.2em; text-transform:uppercase; margin-bottom:5px;">Home</div>
+            <div style="font-size:1.8em; font-weight:900;" id="bt_home_score">0</div>
+          </div>
+          <div class="tracker-team tracker-a-team">
+            <div style="font-size:0.8em; color:#555;">AWAY</div>
+            <div id="bt_away_name" style="font-size:1.2em; text-transform:uppercase; margin-bottom:5px;">Away</div>
+            <div style="font-size:1.8em; font-weight:900;" id="bt_away_score">0</div>
+          </div>
+        </div>
+
+        <div style="text-align:center; font-weight:bold; color:#777; margin-bottom:15px; font-size:0.85em; background: #f0f0f0; padding: 10px; border-radius: 8px;">
+          Tap to assign: 
+          <br><span style="color:#1a73e8;">Blue = Home</span> | <span style="color:#d93025;">Red = Away</span> | <span style="color:#777;">Slash = Dead</span>
+        </div>
+
+        <div id="bt_balls_container" class="balls-grid"></div>
+
+      </div>
+
+      <div class="tracker-footer">
+        <button class="btn-cancel" onclick="closeTracker()">Cancel</button>
+        <button class="btn-apply" onclick="applyTrackerScores()">Apply Score</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // Utility to ensure team names match safely, converting & to "and" and stripping punctuation
+    const makeKey = (s) => s ? s.toString().toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '') : "";
+
+    let playerFargos = { h: [0,0,0,0,0], a: [0,0,0,0,0] };
+    let playerNames = { h: ["","","","",""], a: ["","","","",""] };
+    let activeTracker = { matchIdx: -1, gameNum: -1, format: '9-Ball', balls: {} };
+    let scoreTimeouts = {};
+    let regPlayers = Array(8).fill(null);
+    window.regInfo = {};
+    window.teamRosters = {};
+    window.qualifiedRegPlayers = {};
+
+    window.onload = function() {
+      updateFormatUI();
+      document.querySelectorAll('.desktop-vs-label').forEach(el => {
+        if(window.innerWidth > 768) el.style.display = 'block';
+      });
+
+      google.script.run.withSuccessHandler(data => {
+        window.regInfo = data.regInfo;
+        window.teamRosters = data.rosters;
+        window.qualifiedRegPlayers = data.qualifiedRegPlayers;
+        updateRegTeamDropdown();
+        validateScoringInputs();
+      }).getAppData();
+    };
+
+    document.addEventListener('click', function(e) {
+      if(!e.target.closest('.search-container')) {
+        document.querySelectorAll('.suggestions').forEach(box => box.classList.add('hidden'));
+      }
+    });
+
+    function switchView(view) {
+      if (view === 'scoring') {
+        document.getElementById('scoring-view').classList.remove('hidden');
+        document.getElementById('registration-view').classList.add('hidden');
+        document.getElementById('tab-scoring').classList.add('active');
+        document.getElementById('tab-registration').classList.remove('active');
+        validateScoringInputs();
+      } else if (view === 'registration') {
+        document.getElementById('scoring-view').classList.add('hidden');
+        document.getElementById('registration-view').classList.remove('hidden');
+        document.getElementById('tab-scoring').classList.remove('active');
+        document.getElementById('tab-registration').classList.add('active');
+      }
+    }
+
+    function updateRegTeamDropdown() {
+      const format = document.getElementById('reg_format').value;
+      const select = document.getElementById('reg_team_name');
+      
+      select.innerHTML = '<option value="">-- Choose an Approved Qualified Team --</option>';
+
+      if (window.regInfo && window.regInfo[format]) {
+        let teams = window.regInfo[format];
+        teams.forEach(t => {
+          let opt = document.createElement('option');
+          opt.value = t.displayName;
+          
+          if (t.isRegistered) {
+            opt.innerText = `${t.displayName} (Already Registered)`;
+            opt.disabled = true;
+          } else {
+            opt.innerText = t.displayName;
+          }
+          select.appendChild(opt);
+        });
+      }
+      checkRegTeamStatus();
+      for(let i=0; i<8; i++) clearRegSlot(i);
+    }
+
+    function checkRegTeamStatus() {
+      const team = document.getElementById('reg_team_name').value;
+      const submitBtn = document.getElementById('regSubmitBtn');
+      submitBtn.disabled = !team;
+      for(let i=0; i<8; i++) clearRegSlot(i);
+    }
+
+    function updateFormatUI() {
+      const format = document.getElementById('game_format').value;
+      const trackerControls = document.querySelectorAll('.tracker-controls');
+      trackerControls.forEach(ctrl => {
+        ctrl.style.display = (format === '8-Ball') ? 'none' : 'flex';
+      });
+      
+      document.getElementById('h_team_name').value = "";
+      document.getElementById('a_team_name').value = "";
+      updateTeamLabels();
+      clearScoringSide('h');
+      clearScoringSide('a');
+      calc();
+      validateScoringInputs();
+    }
+
+    function clearScoringSide(team) {
+      for(let i=0; i<5; i++) {
+        clearPlayerSlot(team, i);
+      }
+      calc();
+    }
+
+    function updateTeamLabels() {
+      let hName = document.getElementById('h_team_name').value.trim() || "Home";
+      let aName = document.getElementById('a_team_name').value.trim() || "Away";
+
+      for (let i = 0; i < 5; i++) {
+        document.getElementById(`label_h_match_${i}`).innerText = `Match ${i+1} - ${hName}`;
+        document.getElementById(`label_a_match_${i}`).innerText = `Match ${i+1} - ${aName}`;
+        document.getElementById(`label_h_run_${i}`).innerText = `${hName.toUpperCase()} SCORE:`;
+        document.getElementById(`label_a_run_${i}`).innerText = `${aName.toUpperCase()} SCORE:`;
+      }
+
+      document.getElementById('label_h_breakdown').innerText = `${hName} Final Breakdown`;
+      document.getElementById('label_a_breakdown').innerText = `${aName} Final Breakdown`;
+    }
+
+    function showToast(message, type = 'error') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerText = message;
+      container.appendChild(toast);
+      
+      void toast.offsetWidth; 
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 4500);
+    }
+
+    function searchTeamUI(input, teamType) {
+      const format = document.getElementById('game_format').value;
+      const rosters = window.teamRosters[format] || {};
+      const query = input.value.toLowerCase().trim();
+      
+      const box = input.nextElementSibling;
+      box.innerHTML = '';
+
+      const results = Object.keys(rosters).filter(t => t.toLowerCase().includes(query)).sort();
+
+      if (results.length === 0) {
+        box.classList.add('hidden');
+        validateScoringInputs();
+        return;
+      }
+
+      box.classList.remove('hidden');
+      results.forEach(tName => {
+        let d = document.createElement('div');
+        d.className = 'suggestion-item';
+        d.innerText = tName;
+        d.onclick = () => {
+          input.value = tName;
+          box.classList.add('hidden');
+          updateTeamLabels();
+          validateScoringInputs();
+        };
+        box.appendChild(d);
+      });
+      validateScoringInputs();
+    }
+
+    function searchScoringPlayer(input, team, idx) {
+      const format = document.getElementById('game_format').value;
+      const teamName = team === 'h' ? document.getElementById('h_team_name').value.trim() : document.getElementById('a_team_name').value.trim();
+      const rosters = window.teamRosters[format] || {};
+      
+      const box = input.nextElementSibling;
+      box.innerHTML = '';
+
+      if (!teamName || !rosters[teamName]) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      const query = input.value.toLowerCase().trim();
+      const teamPlayers = rosters[teamName];
+      const results = teamPlayers.filter(p => p.name.toLowerCase().includes(query));
+
+      if (results.length === 0) {
+        box.classList.add('hidden');
+        validateScoringInputs();
+        return;
+      }
+
+      box.classList.remove('hidden');
+      results.forEach(res => {
+        let d = document.createElement('div');
+        d.className = 'suggestion-item';
+        d.innerText = `${res.name} (${res.fargo})`;
+        d.onclick = () => {
+          if (playerNames[team].includes(res.name) && playerNames[team].indexOf(res.name) !== idx) {
+            showToast(`Oops! ${res.name} is already playing in another match for this team.`, 'warning');
+            box.classList.add('hidden');
+            input.value = '';
+            return;
+          }
+
+          input.value = res.name;
+          document.getElementById(`${team}_name_disp_${idx}`).innerText = res.name;
+          document.getElementById(`${team}_fargo_disp_${idx}`).innerText = 'Fargo: ' + res.fargo;
+          playerFargos[team][idx] = res.fargo;
+          playerNames[team][idx] = res.name;
+          box.classList.add('hidden');
+          calc();
+          validateScoringInputs();
+        };
+        box.appendChild(d);
+      });
+      validateScoringInputs();
+    }
+
+    function handlePlayerBlur(input, team, idx) {
+      setTimeout(() => {
+        const format = document.getElementById('game_format').value;
+        const teamInputId = team === 'h' ? 'h_team_name' : 'a_team_name';
+        const teamName = document.getElementById(teamInputId).value.trim();
+        const rosters = window.teamRosters[format] || {};
+        const teamPlayers = rosters[teamName] || [];
+
+        const val = input.value.trim();
+        const box = document.getElementById(`${team}_player_box_${idx}`);
+
+        if (val === "") {
+          clearPlayerSlot(team, idx);
+          box.classList.remove('invalid-field-container');
+          validateScoringInputs();
+          return;
+        }
+
+        const matchedPlayer = teamPlayers.find(p => p.name.toLowerCase() === val.toLowerCase());
+
+        if (matchedPlayer) {
+          if (playerNames[team].includes(matchedPlayer.name) && playerNames[team].indexOf(matchedPlayer.name) !== idx) {
+            box.classList.add('invalid-field-container');
+            showToast(`Player "${matchedPlayer.name}" is already assigned to another match.`, "error");
+            clearInternalPlayerSlot(team, idx);
+          } else {
+            document.getElementById(`${team}_name_disp_${idx}`).innerText = matchedPlayer.name;
+            document.getElementById(`${team}_fargo_disp_${idx}`).innerText = 'Fargo: ' + matchedPlayer.fargo;
+            playerFargos[team][idx] = matchedPlayer.fargo;
+            playerNames[team][idx] = matchedPlayer.name;
+            input.value = matchedPlayer.name;
+            box.classList.remove('invalid-field-container');
+          }
+        } else {
+          box.classList.add('invalid-field-container');
+          showToast(`Player "${val}" is not on the registered roster for ${teamName}.`, "error");
+          clearInternalPlayerSlot(team, idx);
+        }
+        
+        calc();
+        validateScoringInputs();
+      }, 200);
+    }
+
+    function clearPlayerSlot(team, idx) {
+      document.getElementById(`${team}_p_input_${idx}`).value = "";
+      clearInternalPlayerSlot(team, idx);
+    }
+
+    function clearInternalPlayerSlot(team, idx) {
+      document.getElementById(`${team}_name_disp_${idx}`).innerText = "---";
+      document.getElementById(`${team}_fargo_disp_${idx}`).innerText = "Fargo: 0";
+      playerNames[team][idx] = "";
+      playerFargos[team][idx] = 0;
+    }
+
+    function validateScoringInputs() {
+      if(!window.teamRosters) return { hValid: false, aValid: false, playerErrors: false };
+
+      const format = document.getElementById('game_format').value;
+      const rosters = window.teamRosters[format] || {};
+
+      const hTeamInput = document.getElementById('h_team_name');
+      const aTeamInput = document.getElementById('a_team_name');
+      const hTeam = hTeamInput.value.trim();
+      const aTeam = aTeamInput.value.trim();
+
+      const hValid = hTeam === "" || rosters.hasOwnProperty(hTeam);
+      const aValid = aTeam === "" || rosters.hasOwnProperty(aTeam);
+
+      hTeamInput.classList.toggle('invalid-field', hTeam !== "" && !hValid);
+      aTeamInput.classList.toggle('invalid-field', aTeam !== "" && !aValid);
+
+      let playerErrors = false;
+
+      for(let i=0; i<5; i++) {
+        const hInput = document.getElementById(`h_p_input_${i}`);
+        const hVal = hInput ? hInput.value.trim() : "";
+        const hBox = document.getElementById(`h_player_box_${i}`);
+        
+        if(hVal !== "") {
+          const isOnRoster = rosters[hTeam] && rosters[hTeam].some(p => p.name.toLowerCase() === hVal.toLowerCase());
+          if(!hValid || !isOnRoster) {
+            hBox.classList.add('invalid-field-container');
+            playerErrors = true;
+          } else {
+            hBox.classList.remove('invalid-field-container');
+          }
+        } else {
+          hBox.classList.remove('invalid-field-container');
+        }
+
+        const aInput = document.getElementById(`a_p_input_${i}`);
+        const aVal = aInput ? aInput.value.trim() : "";
+        const aBox = document.getElementById(`a_player_box_${i}`);
+        
+        if(aVal !== "") {
+          const isOnRoster = rosters[aTeam] && rosters[aTeam].some(p => p.name.toLowerCase() === aVal.toLowerCase());
+          if(!aValid || !isOnRoster) {
+            aBox.classList.add('invalid-field-container');
+            playerErrors = true;
+          } else {
+            aBox.classList.remove('invalid-field-container');
+          }
+        } else {
+          aBox.classList.remove('invalid-field-container');
+        }
+      }
+
+      return { hValid: hTeam !== "" && hValid, aValid: aTeam !== "" && aValid, playerErrors };
+    }
+
+    function searchRegPlayer(input, idx) {
+      const format = document.getElementById('reg_format').value;
+      const teamSelect = document.getElementById('reg_team_name').value;
+      const box = input.nextElementSibling;
+      box.innerHTML = '';
+
+      if (!teamSelect) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      let baseTeamName = teamSelect;
+      let suffixMatch = teamSelect.match(/(.+)\s*-\s*\d+$/);
+      if(suffixMatch) baseTeamName = suffixMatch[1].trim();
+
+      // Utilize makeKey to ensure special characters don't break the lookup
+      const teamKey = makeKey(baseTeamName);
+      const qualRosters = window.qualifiedRegPlayers[format] || {};
+      const teamPlayers = qualRosters[teamKey] || [];
+
+      if(teamPlayers.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      const query = input.value.toLowerCase().trim();
+      const results = teamPlayers.filter(p => p.name.toLowerCase().includes(query)).sort((a,b) => a.name.localeCompare(b.name));
+
+      if (results.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+
+      box.classList.remove('hidden');
+      results.forEach(res => {
+        let d = document.createElement('div');
+        d.className = 'suggestion-item';
+        d.innerText = `${res.name} (${res.fargo})`;
+        d.onclick = () => {
+          let alreadyAdded = regPlayers.some((p, i) => p && p.name === res.name && i !== idx);
+          if (alreadyAdded) {
+            showToast(`Oops! ${res.name} is already listed on this roster.`, 'warning');
+            box.classList.add('hidden'); input.value = ''; return;
+          }
+
+          input.value = res.name;
+          document.getElementById(`reg_name_disp_${idx}`).innerText = res.name;
+          document.getElementById(`reg_fargo_disp_${idx}`).innerText = 'Fargo: ' + res.fargo;
+          regPlayers[idx] = { name: res.name, fargo: res.fargo };
+          box.classList.add('hidden');
+        };
+        box.appendChild(d);
+      });
+    }
+
+    function handleRegPlayerBlur(input, idx) {
+      setTimeout(() => {
+        const format = document.getElementById('reg_format').value;
+        const teamSelect = document.getElementById('reg_team_name').value;
+        const val = input.value.trim();
+
+        if (!teamSelect || val === "") {
+          clearRegSlot(idx);
+          return;
+        }
+
+        let baseTeamName = teamSelect;
+        let suffixMatch = teamSelect.match(/(.+)\s*-\s*\d+$/);
+        if(suffixMatch) baseTeamName = suffixMatch[1].trim();
+
+        // Utilize makeKey to ensure special characters don't break the lookup
+        const teamKey = makeKey(baseTeamName);
+        const qualRosters = window.qualifiedRegPlayers[format] || {};
+        const teamPlayers = qualRosters[teamKey] || [];
+
+        const matchedPlayer = teamPlayers.find(p => p.name.toLowerCase() === val.toLowerCase());
+
+        if (matchedPlayer) {
+          let alreadyAdded = regPlayers.some((p, i) => p && p.name === matchedPlayer.name && i !== idx);
+          if (alreadyAdded) {
+            showToast(`Player "${matchedPlayer.name}" is already on this roster.`, "error");
+            clearRegSlot(idx);
+          } else {
+            document.getElementById(`reg_name_disp_${idx}`).innerText = matchedPlayer.name;
+            document.getElementById(`reg_fargo_disp_${idx}`).innerText = 'Fargo: ' + matchedPlayer.fargo;
+            regPlayers[idx] = { name: matchedPlayer.name, fargo: matchedPlayer.fargo };
+            input.value = matchedPlayer.name;
+          }
+        } else {
+          showToast(`Player "${val}" is not qualified for ${baseTeamName} in ${format}.`, "error");
+          clearRegSlot(idx);
+        }
+      }, 200);
+    }
+
+    function clearRegSlot(idx) {
+      const input = document.getElementById(`reg_p_input_${idx}`);
+      if(input) input.value = "";
+      document.getElementById(`reg_name_disp_${idx}`).innerText = "---";
+      document.getElementById(`reg_fargo_disp_${idx}`).innerText = "Fargo: 0";
+      regPlayers[idx] = null;
+    }
+
+    function resetScoringForm() {
+      // Clear game scores
+      for(let r=0; r<5; r++) {
+        for(let g=1; g<=3; g++) {
+          document.getElementById(`h_s_${r}_${g}`).value = "";
+          document.getElementById(`a_s_${r}_${g}`).value = "";
+        }
+      }
+      
+      // Reset defaults
+      document.getElementById('game_format').value = '9-Ball';
+      
+      // Utilize existing UI update to clear teams, rosters, and calculation totals naturally
+      updateFormatUI();
+      
+      // Ensure the button resets to the correct text
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerText = "SUBMIT FINAL MATCH LOG";
+      submitBtn.disabled = false;
+
+      // Scroll smoothly to the top of the page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetRegistrationForm() {
+      document.getElementById('reg_format').value = '9-Ball';
+      
+      // Triggering this natively drops all slots out to blank via checkRegTeamStatus
+      updateRegTeamDropdown();
+      
+      const submitBtn = document.getElementById('regSubmitBtn');
+      submitBtn.innerText = "SUBMIT ROSTER REGISTRATION";
+      submitBtn.disabled = true;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function processRegSubmit() {
+      const teamName = document.getElementById('reg_team_name').value;
+      const format = document.getElementById('reg_format').value;
+
+      if (!teamName) { showToast("Please choose an approved team name.", "error"); return; }
+      
+      const activeCount = regPlayers.filter(p => p !== null).length;
+      if (activeCount < 5) { showToast(`A minimum of 5 players are required for a valid roster.`, "error"); return; }
+
+      if (!confirm(`Are you sure you want to register the roster for "${teamName}"?`)) return;
+
+      const submitBtn = document.getElementById('regSubmitBtn');
+      submitBtn.innerText = "SUBMITTING ROSTER...";
+      submitBtn.disabled = true;
+
+      const payload = {
+        teamName: teamName,
+        format: format,
+        players: regPlayers.map(p => p ? p.name : "")
+      };
+
+      google.script.run.withSuccessHandler(msg => {
+        showToast(msg, "success");
+        // Replaced location.reload() with the newly added soft reset
+        setTimeout(() => resetRegistrationForm(), 2500);
+      }).withFailureHandler(err => {
+        showToast("Submission dropped: " + err.message, "error");
+        submitBtn.innerText = "SUBMIT ROSTER REGISTRATION";
+        submitBtn.disabled = false;
+      }).submitTeamRegistration(payload);
+    }
+
+    function openTracker(matchIdx, gameNum) {
+      const format = document.getElementById('game_format').value;
+      if (format === '8-Ball') return;
+
+      activeTracker = { matchIdx, gameNum, format, balls: {} };
+      const maxBalls = format === '9-Ball' ? 9 : 10;
+      for(let i=1; i<=maxBalls; i++) activeTracker.balls[i] = null;
+
+      document.getElementById('bt_match').innerText = matchIdx + 1;
+      document.getElementById('bt_game').innerText = gameNum;
+      document.getElementById('bt_home_name').innerText = document.getElementById('h_team_name').value.trim() || "Home";
+      document.getElementById('bt_away_name').innerText = document.getElementById('a_team_name').value.trim() || "Away";
+
+      renderBalls();
+      updateTrackerPreview();
+      document.getElementById('trackerOverlay').classList.remove('hidden');
+    }
+
+    function renderBalls() {
+      const container = document.getElementById('bt_balls_container');
+      container.innerHTML = '';
+      const maxBalls = activeTracker.format === '9-Ball' ? 9 : 10;
+      
+      for(let i=1; i<=maxBalls; i++) {
+        let ball = document.createElement('div');
+        ball.className = `pool-ball state-${activeTracker.balls[i] || 'none'}`;
+        if (i === maxBalls) ball.classList.add('money-ball');
+        ball.innerText = i;
+        ball.onclick = () => toggleBall(i);
+        container.appendChild(ball);
+      }
+    }
+
+    function toggleBall(num) {
+      const maxBalls = activeTracker.format === '9-Ball' ? 9 : 10;
+      const isMoneyBall = (num === maxBalls);
+      let currentState = activeTracker.balls[num];
+
+      if (currentState === null) {
+        activeTracker.balls[num] = 'h';
+      } else if (currentState === 'h') {
+        activeTracker.balls[num] = 'a';
+      } else if (currentState === 'a') {
+        activeTracker.balls[num] = isMoneyBall ? null : 'dead';
+      } else {
+        activeTracker.balls[num] = null;
+      }
+
+      renderBalls();
+      updateTrackerPreview();
+    }
+
+    function updateTrackerPreview() {
+      const maxBalls = activeTracker.format === '9-Ball' ? 9 : 10;
+      const moneyBallState = activeTracker.balls[maxBalls];
+      let hScore = 0; let aScore = 0;
+
+      if (moneyBallState === 'h') {
+        hScore = 14;
+        aScore = Object.keys(activeTracker.balls).reduce((sum, key) => {
+          return (key != maxBalls && activeTracker.balls[key] === 'a') ? sum + 1 : sum;
+        }, 0);
+      } else if (moneyBallState === 'a') {
+        aScore = 14;
+        hScore = Object.keys(activeTracker.balls).reduce((sum, key) => {
+          return (key != maxBalls && activeTracker.balls[key] === 'h') ? sum + 1 : sum;
+        }, 0);
+      } else {
+        hScore = Object.values(activeTracker.balls).filter(v => v === 'h').length;
+        aScore = Object.values(activeTracker.balls).filter(v => v === 'a').length;
+      }
+
+      document.getElementById('bt_home_score').innerText = hScore;
+      document.getElementById('bt_away_score').innerText = aScore;
+    }
+
+    function applyTrackerScores() {
+      const maxBalls = activeTracker.format === '9-Ball' ? 9 : 10;
+      const moneyBallState = activeTracker.balls[maxBalls];
+
+      if (moneyBallState !== 'h' && moneyBallState !== 'a') {
+        showToast(`Wait! The game-winning ${maxBalls}-Ball must be explicitly won by a player. It cannot be dead.`, "warning");
+        return;
+      }
+
+      document.getElementById(`h_s_${activeTracker.matchIdx}_${activeTracker.gameNum}`).value = document.getElementById('bt_home_score').innerText;
+      document.getElementById(`a_s_${activeTracker.matchIdx}_${activeTracker.gameNum}`).value = document.getElementById('bt_away_score').innerText;
+
+      closeTracker();
+      calc();
+    }
+
+    function closeTracker() { document.getElementById('trackerOverlay').classList.add('hidden'); }
+
+    function validateMaxScore(input) {
+      const format = document.getElementById('game_format').value;
+      let maxLoser = format === '9-Ball' ? 8 : (format === '10-Ball' ? 9 : 7);
+      const val = parseInt(input.value);
+      
+      if (!isNaN(val)) {
+        if (val > 14) {
+          input.value = 14;
+          showToast("Heads up: Max score is 14 points.", 'warning');
+        } else if (val > maxLoser && val < 14) {
+          showToast(`Rule Alert: In ${format}, the loser can score a maximum of ${maxLoser}.`, 'warning');
+        }
+      }
+
+      const isHome = input.id.startsWith('h_');
+      const row = input.getAttribute('data-row');
+      const game = input.getAttribute('data-game');
+      const oppId = isHome ? `a_s_${row}_${game}` : `h_s_${row}_${game}`;
+      const oppInput = document.getElementById(oppId);
+      const pairKey = `${row}_${game}`;
+
+      if (scoreTimeouts[pairKey]) clearTimeout(scoreTimeouts[pairKey]);
+
+      scoreTimeouts[pairKey] = setTimeout(() => {
+        const currentVal = parseInt(input.value);
+        if (!isNaN(currentVal)) {
+          if (currentVal < 14) {
+            if (oppInput.value !== "14") {
+              oppInput.value = 14;
+              calc();
+            }
+          } else if (currentVal === 14) {
+            if (oppInput.value === "14") {
+              oppInput.value = "";
+              calc();
+            }
+          }
+        }
+      }, 1000);
+
+      calc();
+    }
+
+    function calc() {
+      const format = document.getElementById('game_format').value;
+      let maxLoser = format === '9-Ball' ? 8 : (format === '10-Ball' ? 9 : 7);
+
+      let hFargoSum = playerFargos.h.reduce((a, b) => a + b, 0);
+      let aFargoSum = playerFargos.a.reduce((a, b) => a + b, 0);
+
+      let rawHomeHcap = 0;
+      let rawAwayHcap = 0;
+
+      for (let i = 0; i < 5; i++) {
+        let hF = playerFargos.h[i] || 0;
+        let aF = playerFargos.a[i] || 0;
+
+        if (hF > 0 && aF > 0) {
+          let delta = hF - aF;
+          let p1WinPercent = 1 - (1 / (1 + Math.pow(2, delta / 100)));
+          let p2WinPercent = 1 - p1WinPercent;
+
+          let p1AvgPts = ((p1WinPercent * 14.0) + (p2WinPercent * (7.4 - 0.0062 * aF))) * 3;
+          let p2AvgPts = ((p2WinPercent * 14.0) + (p1WinPercent * (7.4 - 0.0062 * hF))) * 3;
+
+          rawHomeHcap += p1AvgPts;
+          rawAwayHcap += p2AvgPts;
+        }
+      }
+
+      let hHcapToApply = 0;
+      let aHcapToApply = 0;
+
+      if (rawHomeHcap > rawAwayHcap) {
+        aHcapToApply = Math.floor(rawHomeHcap - rawAwayHcap);
+      } else if (rawAwayHcap > rawHomeHcap) {
+        hHcapToApply = Math.floor(rawAwayHcap - rawHomeHcap);
+      }
+
+      document.getElementById('h_hcap').innerText = hHcapToApply;
+      document.getElementById('a_hcap').innerText = aHcapToApply;
+
+      let hPenalty = hFargoSum > 2375 ? hFargoSum - 2375 : 0;
+      let aPenalty = aFargoSum > 2375 ? aFargoSum - 2375 : 0;
+
+      document.getElementById('h_fargo_total').innerText = "Fargo Sum: " + hFargoSum;
+      document.getElementById('a_fargo_total').innerText = "Fargo Sum: " + aFargoSum;
+      document.getElementById('h_penalty').innerText = hPenalty ? `(-${hPenalty}) OVER 2375 LIMIT` : "";
+      document.getElementById('a_penalty').innerText = aPenalty ? `(-${aPenalty}) OVER 2375 LIMIT` : "";
+
+      document.getElementById('h_final_fargo_disp').innerText = hFargoSum;
+      document.getElementById('a_final_fargo_disp').innerText = aFargoSum;
+
+      let hPoints = 0, aPoints = 0;
+      let errors = false;
+      let cumulativeHomePoints = 0;
+      let cumulativeAwayPoints = 0;
+
+      for(let r=0; r<5; r++) {
+        let hRowSum = 0; let aRowSum = 0;
+        
+        for(let g=1; g<=3; g++) {
+          let hEl = document.getElementById(`h_s_${r}_${g}`);
+          let aEl = document.getElementById(`a_s_${r}_${g}`);
+          let hV = parseInt(hEl.value);
+          let aV = parseInt(aEl.value);
+
+          hRowSum += (isNaN(hV) ? 0 : hV);
+          aRowSum += (isNaN(aV) ? 0 : aV);
+
+          hEl.classList.remove('valid-score', 'invalid-score');
+          aEl.classList.remove('valid-score', 'invalid-score');
+
+          if (!isNaN(hV) || !isNaN(aV)) {
+            if ((hV === 14 && aV >= 0 && aV <= maxLoser) || (aV === 14 && hV >= 0 && hV <= maxLoser)) {
+              hEl.classList.add('valid-score'); aEl.classList.add('valid-score');
+              hPoints += (isNaN(hV) ? 0 : hV); aPoints += (isNaN(aV) ? 0 : aV);
+            } else {
+              hEl.classList.add('invalid-score'); aEl.classList.add('invalid-score');
+              errors = true;
+            }
+          }
+        }
+
+        document.getElementById(`h_tot_${r}`).innerText = hRowSum;
+        document.getElementById(`a_tot_${r}`).innerText = aRowSum;
+        cumulativeHomePoints += hRowSum; cumulativeAwayPoints += aRowSum;
+        document.getElementById(`h_run_team_${r}`).innerText = cumulativeHomePoints;
+        document.getElementById(`a_run_team_${r}`).innerText = cumulativeAwayPoints;
+      }
+
+      document.getElementById('h_final_pts').innerText = hPoints;
+      document.getElementById('h_final_pen').innerText = hPenalty;
+      document.getElementById('a_final_pts').innerText = aPoints;
+      document.getElementById('a_final_pen').innerText = aPenalty;
+
+      document.getElementById('h_run_total').innerText = hPoints + hHcapToApply - hPenalty;
+      document.getElementById('a_run_total').innerText = aPoints + aHcapToApply - aPenalty;
+
+      const submitBtn = document.getElementById('submitBtn');
+      if (errors) {
+        submitBtn.innerText = "FIX ERRORS TO SUBMIT";
+        submitBtn.disabled = true;
+      } else {
+        submitBtn.innerText = "SUBMIT FINAL MATCH LOG";
+        submitBtn.disabled = false;
+      }
+    }
+
+    function processSubmit() {
+      const valState = validateScoringInputs();
+
+      if(!valState.hValid || !valState.aValid) {
+        showToast("Invalid Team Name detected. Please fix the highlighted fields.", "error");
+        return;
+      }
+
+      if(valState.playerErrors) {
+        showToast("One or more players do not match the registered team rosters. Please fix the highlighted fields.", "error");
+        return;
+      }
+
+      for(let i=0; i<5; i++) {
+        if(!playerNames.h[i] || !playerNames.a[i]) {
+          showToast(`Please complete selection for Match ${i + 1}.`, 'error');
+          return;
+        }
+      }
+      if (document.querySelectorAll('.invalid-score').length > 0) {
+        showToast("Please fix highlighted score validation issues.", 'error'); return;
+      }
+
+      if (!confirm("Are you sure you want to submit this match log?")) return;
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.innerText = "SUBMITTING...";
+      submitBtn.disabled = true;
+
+      const hFargoSum = playerFargos.h.reduce((a, b) => a + b, 0);
+      const aFargoSum = playerFargos.a.reduce((a, b) => a + b, 0);
+
+      const payload = {
+        gameFormat: document.getElementById('game_format').value,
+        homeTeamName: document.getElementById('h_team_name').value || "Home Team",
+        awayTeamName: document.getElementById('a_team_name').value || "Away Team",
+        homeHandicap: document.getElementById('h_hcap').innerText,
+        awayHandicap: document.getElementById('a_hcap').innerText,
+        homeTotalFargo: hFargoSum,
+        awayTotalFargo: aFargoSum,
+        homePenalty: hFargoSum > 2375 ? hFargoSum - 2375 : 0,
+        awayPenalty: aFargoSum > 2375 ? aFargoSum - 2375 : 0,
+        homeRunningTotal: document.getElementById('h_run_total').innerText,
+        awayRunningTotal: document.getElementById('a_run_total').innerText,
+        matches: []
+      };
+
+      for(let i=0; i<5; i++) {
+        payload.matches.push({
+          hName: playerNames.h[i], hFargo: playerFargos.h[i], 
+          hG1: document.getElementById(`h_s_${i}_1`).value, hG2: document.getElementById(`h_s_${i}_2`).value, hG3: document.getElementById(`h_s_${i}_3`).value,
+          aName: playerNames.a[i], aFargo: playerFargos.a[i], 
+          aG1: document.getElementById(`a_s_${i}_1`).value, aG2: document.getElementById(`a_s_${i}_2`).value, aG3: document.getElementById(`a_s_${i}_3`).value
+        });
+      }
+
+      google.script.run.withSuccessHandler(msg => {
+        showToast("Success! Match logged successfully.", 'success');
+        // Replaced location.reload() with the newly added soft reset
+        setTimeout(() => resetScoringForm(), 2000);
+      }).withFailureHandler(err => {
+        showToast("Submission dropped: " + err.message, 'error');
+        submitBtn.innerText = "SUBMIT FINAL MATCH LOG";
+        submitBtn.disabled = false;
+      }).submitMatch(payload);
+    }
+  </script>
+<dialog id="lab-picker" class="lab-dialog"><h2>Choose a player</h2><p>Your current player stays selected until you choose a replacement.</p><label for="lab-player-search">Search names (optional)</label><input id="lab-player-search" type="search" autocomplete="off"><div id="lab-player-options" class="lab-options"></div><button type="button" class="close-dialog" onclick="this.closest('dialog').close()">Cancel - keep current player</button></dialog><dialog id="lab-review" class="lab-dialog"><h2>Review test registration</h2><p id="lab-review-team"></p><ul id="lab-review-players" class="lab-review-list"></ul><p>This saves sample data in this browser session only. It does not register a real team.</p><p id="lab-review-error" role="alert"></p><button type="button" id="lab-confirm" class="lab-confirm">Confirm test registration</button><button type="button" class="close-dialog" onclick="this.closest('dialog').close()">Back - edit roster</button></dialog><script src="lab.js"></script></body>
+</html>
