@@ -17,3 +17,7 @@ October 26, 2026 handoff: workspace `work/top-shooter-20261026/website-report.js
 ## Signup state at initial publication
 
 Registration is pending: the existing Google Form is accessible but lists old July–September events with no year. Do not advertise that link as current. Await owner-confirmed dates, formats, venues, times, fees and prize terms; then update/verify the form within authorization before enabling the page's registration button. Existing team and cash-event signup flows are unrelated and unchanged.
+
+## Signup enabled October 26, 2026
+
+Zac message 569 explicitly requested a signup button after the form update, superseding the initial hold above. Anonymous responder access verified HTTP 200, Submit and updated dates: 8-ball 11/21/2026 and 1/9/2027, 9-ball 12/5/2026 and 12/19/2026, 10-ball 12/12/2026. The configured button opens the canonical Google responder form in a new tab. No form contents or player records were changed in this website update. Existing form copy beyond the dates was not independently revalidated; the website does not restate those terms.
