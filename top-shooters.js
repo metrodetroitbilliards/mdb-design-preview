@@ -1,0 +1,8 @@
+'use strict';
+const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#main-nav');
+menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.setAttribute('aria-expanded','false');nav.classList.remove('open')}});
+const filters=document.querySelector('#qualifier-filters'),search=document.querySelector('#search'),discipline=document.querySelector('#discipline');filters.hidden=false;
+const normalize=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+function filter(){const tokens=normalize(search.value).split(' ').filter(Boolean);let count=0,divisions=0;document.querySelectorAll('.discipline').forEach(group=>{let groupCount=0;group.querySelectorAll('.division-card').forEach(card=>{let cardCount=0;card.querySelectorAll('tbody tr').forEach(row=>{const match=(!discipline.value||group.dataset.discipline===discipline.value)&&tokens.every(t=>normalize(row.dataset.player+' '+card.dataset.division).includes(t));row.hidden=!match;if(match)cardCount++});card.hidden=!cardCount;if(cardCount)divisions++;groupCount+=cardCount});group.hidden=!groupCount;count+=groupCount});document.querySelector('#result-count').textContent=count+' qualifying '+(count===1?'entry':'entries')+' across '+divisions+' '+(divisions===1?'division':'divisions');document.querySelector('#empty').hidden=count>0;}
+search.addEventListener('input',filter);discipline.addEventListener('change',filter);document.querySelector('#reset').addEventListener('click',()=>{search.value='';discipline.value='';filter();search.focus()});
