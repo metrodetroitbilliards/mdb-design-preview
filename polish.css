@@ -91,3 +91,5 @@ footer{margin-top:60px;background:#101214;border-top:1px solid var(--line)}
  footer{margin-top:38px}.footer-grid{gap:22px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+.event-signup-bar{background:#171a1e;border-bottom:2px solid var(--red);padding:20px 0}.event-signup-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}.event-signup-title strong{display:block;font-size:20px;letter-spacing:.03em}.event-signup-title span{display:block;font-size:13px;color:var(--muted);margin-top:4px}.event-signup-buttons{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.event-signup-buttons .button{font-size:14px;min-height:48px;padding:14px 18px;text-align:center}.event-signup-buttons .text-link{font-size:14px;white-space:nowrap}@media(max-width:1000px){.event-signup-inner{align-items:flex-start;flex-direction:column;gap:14px}}@media(max-width:600px){.event-signup-buttons{width:100%;display:grid;grid-template-columns:1fr;gap:10px}.event-signup-buttons .button{width:100%}.event-signup-bar{padding:16px 0}.event-signup-buttons .text-link{justify-self:start}}
