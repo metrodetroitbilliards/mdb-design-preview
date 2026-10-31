@@ -13,7 +13,7 @@ export function validateContent(input){
    for(const key of fields){
     const value=record[key]??'';
     if(typeof value!=='string'||value.length>12000||/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value))throw new HttpError(400,`Invalid ${key}.`);
-    if((/url$/i.test(key))&&value&&!/^(https:\/\/[^\s]+|(?:index|about|rules|contact|standings|shop|register)\.html(?:#[\w-]+)?)$/.test(value))throw new HttpError(400,`${key} must be an HTTPS link or a site page.`);
+    if((/url$/i.test(key))&&value&&!/^(https:\/\/[^\s]+|(?:index|about|rules|contact|standings|shop|register|vegasshootout)\.html(?:#[\w-]+)?)$/.test(value))throw new HttpError(400,`${key} must be an HTTPS link or a site page.`);
     if((/image$/i.test(key))&&value&&!/^assets\/[a-zA-Z0-9_-]+\.(png|jpg)$/.test(value))throw new HttpError(400,`${key} must be a PNG/JPG in site assets.`);
     if(['start','end','deadline','updated'].includes(key)&&value&&(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(Date.parse(value+'T00:00:00Z'))||new Date(value+'T00:00:00Z').toISOString().slice(0,10)!==value))throw new HttpError(400,`${key} must be a valid date.`);
     row[key]=value;
