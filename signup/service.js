@@ -3,7 +3,7 @@ export class InputError extends Error{constructor(status,message){super(message)
 const fail=(message,status=400)=>{throw new InputError(status,message);};
 export const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),x=>x.toString(16).padStart(2,'0')).join('');
 const rows=async(db,sql,...args)=>(await db.prepare(sql).bind(...args).all()).results;
-export async function catalog(db){return {players:await rows(db,'SELECT * FROM players ORDER BY name'),events:await rows(db,'SELECT * FROM events ORDER BY starts'),venue:'The Rack, Livonia',snapshot:'October 26, 2026, with owner corrections',confirmation:'Entries are reviewed by the league before a place is confirmed.'};}
+export async function catalog(db){const players=await rows(db,'SELECT * FROM players ORDER BY name'),eligibility=await rows(db,'SELECT * FROM eligibility');for(const p of players)p.allowances=Object.fromEntries(eligibility.filter(e=>e.player_id===p.id).map(e=>[e.discipline,e.allowance]));return {players,events:await rows(db,'SELECT * FROM events ORDER BY starts'),venue:'The Rack, Livonia',snapshot:'October 26, 2026, with owner corrections',confirmation:'Entries are reviewed by the league before a place is confirmed.'};}
 function clean(value,max,required=true){if(typeof value!=='string'||value.length>max||/[\u0000-\u001f]/.test(value))fail('Please check your contact details.');value=value.trim();if(required&&!value)fail('Please complete the required fields.');return value;}
 export async function receipt(db,data){
  if(!uuid.test(data.requestId)||!uuid.test(data.token))fail('Invalid registration link.');
@@ -31,6 +31,7 @@ export async function register(db,data,now=new Date()){
  try{await db.batch(statements);}catch(error){
   const retry=await db.prepare('SELECT * FROM requests WHERE id=?').bind(data.requestId).first();
   if(retry&&retry.token_hash===await digest(data.token)&&retry.payload_hash===payloadHash)return receipt(db,data);
+  if(/qualifying_entry_limit/.test(error.message))fail('Your qualifying-listing limit for this discipline is already reached. One listing allows one date; two listings allow both. To switch dates, cancel your existing entry first. No new entries were saved.',409);
   if(/UNIQUE|constraint/i.test(error.message))fail('An entry already exists for one of these events. No new entries were saved. Contact the league if you need help.',409);
   throw error;
  }

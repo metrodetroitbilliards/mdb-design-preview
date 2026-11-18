@@ -1,5 +1,5 @@
 import http from 'node:http';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {database} from '../signup/local-db.js';import {onRequest} from '../functions/api/top-shooters.js';import {onRequest as owner} from '../functions/admin/api/top-shooters.js';
-const root=path.resolve(fileURLToPath(new URL('..',import.meta.url))),db=database();db.exec(fs.readFileSync(root+'/signup/schema.sql','utf8'));db.exec(fs.readFileSync(root+'/signup/seed.sql','utf8'));db.exec('UPDATE events SET open=1,capacity=2');
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url))),db=database();db.exec(fs.readFileSync(root+'/signup/schema.sql','utf8'));db.exec(fs.readFileSync(root+'/signup/seed.sql','utf8'));db.exec('UPDATE events SET open=1,capacity=24');
 const port=Number(process.env.PORT||8799),origin='http://127.0.0.1:'+port;
 http.createServer(async(req,res)=>{try{const url=new URL(req.url,origin);if(req.headers.host!==new URL(origin).host){res.writeHead(403);return res.end();}let response;
  if(url.pathname==='/api/top-shooters'||url.pathname==='/admin/api/top-shooters'){
@@ -9,4 +9,4 @@ http.createServer(async(req,res)=>{try{const url=new URL(req.url,origin);if(req.
   if(req.method==='GET'&&url.pathname==='/api/top-shooters'){const result=await response.json();result.preview=true;response=Response.json(result);}res.writeHead(response.status,Object.fromEntries(response.headers));return res.end(await response.text());
  }
  let pathname=url.pathname==='/'?'/top-shooter-signup/index.html':url.pathname;if(pathname.endsWith('/'))pathname+='index.html';const file=path.resolve(root+'/launch-preview','.'+pathname);if(!file.startsWith(root+path.sep+'launch-preview'+path.sep)||!fs.existsSync(file)){res.writeHead(404);return res.end('Not found');}res.writeHead(200,{'Content-Type':({'.html':'text/html','.css':'text/css','.js':'text/javascript'})[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','Referrer-Policy':'no-referrer'});fs.createReadStream(file).pipe(res);
- }catch{res.writeHead(500);res.end('Preview error');}}).listen(port,'127.0.0.1',()=>console.log('Isolated local preview: '+origin+'/top-shooter-signup/ (memory database; 2-place test capacity)'));
+ }catch{res.writeHead(500);res.end('Preview error');}}).listen(port,'127.0.0.1',()=>console.log('Isolated local preview: '+origin+'/top-shooter-signup/ (memory database; 24-place capacity; test data only)'));
